@@ -253,6 +253,12 @@
           "count": 1,
           "attackModifier": {
             "type": "plus1",
+            "effects": [
+              {
+                "type": "custom",
+                "hint": "%data.custom.cs.toolstwo.3%"
+              }
+            ],
             "rolling": true
           }
         }
@@ -272,6 +278,12 @@
           "count": 1,
           "attackModifier": {
             "type": "plus1",
+            "effects": [
+              {
+                "type": "custom",
+                "hint": "%data.custom.cs.toolstwo.4%"
+              }
+            ],
             "rolling": true
           }
         }
@@ -312,17 +324,17 @@
     {
       "type": "custom",
       "count": 1,
-      "custom": "%data.custom.cs.toolstwo.3%"
-    },
-    {
-      "type": "custom",
-      "count": 1,
-      "custom": "%data.custom.cs.toolstwo.4%"
-    },
-    {
-      "type": "custom",
-      "count": 1,
       "custom": "%data.custom.cs.toolstwo.5%"
+    },
+    {
+      "type": "custom",
+      "count": 1,
+      "custom": "%data.custom.cs.toolstwo.6%"
+    },
+    {
+      "type": "custom",
+      "count": 1,
+      "custom": "%data.custom.cs.toolstwo.7%"
     }
   ]
 }
