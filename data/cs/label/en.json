@@ -643,6 +643,10 @@
         "2": "if projectile %data.action.custom.cs-projectile%",
         "3": "toward the target"
       },
+      "toolstwo": {
+        "1": "Gain 1 %data.characterToken.toolstwo.scrap%",
+        "2": "Gain 1 %data.action.custom.cs-tool%"
+      },
       "tusks": {
         "1": "Affect all summoned allies owned",
         "2": "where X is the number of summoned allies you own",

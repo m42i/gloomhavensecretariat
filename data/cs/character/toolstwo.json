@@ -120,8 +120,9 @@
             "type": "minus1",
             "effects": [
               {
-                "type": "element",
-                "value": "wild"
+                "type": "custom",
+                "value": "%data.custom.cs.toolstwo.1%",
+                "hint": "%data.custom.cs.toolstwo.2%"
               }
             ]
           }
