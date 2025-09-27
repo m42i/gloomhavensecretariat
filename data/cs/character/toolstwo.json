@@ -139,8 +139,9 @@
             "type": "minus1",
             "effects": [
               {
-                "type": "element",
-                "value": "wild"
+                "type": "custom",
+                "value": "%data.custom.cs.toolstwo.1%",
+                "hint": "%data.custom.cs.toolstwo.2%"
               }
             ]
           }
@@ -151,8 +152,9 @@
             "type": "plus1",
             "effects": [
               {
-                "type": "condition",
-                "value": "disarm"
+                "type": "custom",
+                "value": "%data.custom.cs.toolstwo.1%",
+                "hint": "%data.custom.cs.toolstwo.2%"
               }
             ]
           }
@@ -169,8 +171,9 @@
             "type": "plus1",
             "effects": [
               {
-                "type": "condition",
-                "value": "disarm"
+                "type": "custom",
+                "value": "%data.custom.cs.toolstwo.1%",
+                "hint": "%data.custom.cs.toolstwo.2%"
               }
             ]
           }
@@ -183,6 +186,11 @@
               {
                 "type": "condition",
                 "value": "disarm"
+              },
+              {
+                "type": "custom",
+                "value": "%data.custom.cs.toolstwo.1%",
+                "hint": "%data.custom.cs.toolstwo.2%"
               }
             ]
           }

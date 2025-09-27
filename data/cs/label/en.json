@@ -575,6 +575,10 @@
         "1": "all enemies adjacent to the target suffer %game.damage:1%",
         "2": "destroy the occupied obstacle"
       },
+      "toolstwo": {
+        "1": "Gain 1 %data.characterToken.toolstwo.scrap%",
+        "2": "Gain 1 %data.action.custom.cs-tool%"
+      },
       "toxic-imp": {
         "1": "Add +1 %game.action.attack% if the target has %game.condition.infect%",
         "2": "If an enemy targets %data.monster.toxic-imp% with an attack, that enemy gains %game.condition.infect%.",
@@ -642,10 +646,6 @@
         "1": "if the attack is a Projectile %data.action.custom.cs-projectile%",
         "2": "if projectile %data.action.custom.cs-projectile%",
         "3": "toward the target"
-      },
-      "toolstwo": {
-        "1": "Gain 1 %data.characterToken.toolstwo.scrap%",
-        "2": "Gain 1 %data.action.custom.cs-tool%"
       },
       "tusks": {
         "1": "Affect all summoned allies owned",
