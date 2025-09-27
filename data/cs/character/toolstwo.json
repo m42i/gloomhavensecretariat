@@ -312,17 +312,17 @@
     {
       "type": "custom",
       "count": 1,
-      "custom": "%game.custom.perks.loseGearGainScrap%"
+      "custom": "%data.custom.cs.toolstwo.3%"
     },
     {
       "type": "custom",
       "count": 1,
-      "custom": "%game.custom.perks.shortRestRefreshItem%"
+      "custom": "%data.custom.cs.toolstwo.4%"
     },
     {
       "type": "custom",
       "count": 1,
-      "custom": "%game.custom.perks.longRestSpendScrapGainLostGear%"
+      "custom": "%data.custom.cs.toolstwo.5%"
     }
   ]
 }
