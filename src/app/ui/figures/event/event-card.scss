@@ -106,11 +106,13 @@
                         }
 
                         .effects ghs-event-card-effect {
+                            font-size: 0.96em;
                             margin-bottom: 0.1em;
                         }
 
                         .card-action {
                             right: -0.5em;
+                            bottom: -0.5em;
                         }
                     }
                 }
@@ -281,6 +283,14 @@
                         }
                     }
                 }
+
+                &.attack .outcome {
+                    cursor: initial;
+
+                    &:hover {
+                        opacity: initial;
+                    }
+                }
             }
         }
 
@@ -387,6 +397,13 @@
                             font-family: var(--ghs-font-fh-normal);
                         }
                     }
+                }
+            }
+
+            &.winter-outpost,
+            &.summer-outpost {
+                .wrapper .content {
+                    padding-top: 0;
                 }
             }
 
