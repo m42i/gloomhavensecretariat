@@ -4,14 +4,14 @@ import { Component, Inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { gameManager, GameManager } from 'src/app/game/businesslogic/GameManager';
 import { SettingsManager, settingsManager } from 'src/app/game/businesslogic/SettingsManager';
-import { AttackModifierDeck } from 'src/app/game/model/data/AttackModifier';
+import { AttackModifierDeck, AttackResult } from 'src/app/game/model/data/AttackModifier';
 import { EventCardAttack, EventCardEffect, EventCardEffectType } from 'src/app/game/model/data/EventCard';
 import { EntityValueFunction } from 'src/app/game/model/Entity';
 import { ghsDialogClosingHelper, ghsShuffleArray, ghsValueSign } from 'src/app/ui/helper/Static';
 import { AttackModiferDeckChange } from '../../attackmodifier/attackmodifierdeck';
 import { Building } from '../../party/buildings/buildings';
-import { WorldMapComponent } from '../../party/world-map/world-map';
 import { PartySheetDialogComponent } from '../../party/party-sheet-dialog';
+import { WorldMapComponent } from '../../party/world-map/world-map';
 
 @Component({
     standalone: false,
@@ -23,6 +23,7 @@ export class OutpostAttackComponent {
 
     settingsManager: SettingsManager = settingsManager;
     gameManager: GameManager = gameManager;
+    EntityValueFunction = EntityValueFunction;
     attack: EventCardAttack;
     defaultAttack: EventCardAttack | undefined;
     manualAttackValue: number = 50;
@@ -42,6 +43,9 @@ export class OutpostAttackComponent {
     baracksBonus: number = 0;
     moraleDefense: number = 0;
     attacks: number = 0;
+    attackResult: AttackResult | undefined;
+
+    deckActive: boolean = false;
 
     constructor(@Inject(DIALOG_DATA) public data: { attack: EventCardAttack, effects: EventCardEffect[] }, private dialogRef: DialogRef, private dialog: Dialog) {
         if (this.data.attack) {
@@ -68,6 +72,8 @@ export class OutpostAttackComponent {
             }
         }
         this.attack = this.defaultAttack || new EventCardAttack(this.manualAttackValue, this.manualTargetNumber, "", "", []);
+
+        this.deckActive = !!gameManager.game.party.townGuardDeck && gameManager.game.party.townGuardDeck.active;
     }
 
     ngOnInit(): void {
@@ -80,6 +86,10 @@ export class OutpostAttackComponent {
     ngOnDestroy(): void {
         if (this.uiChangeSubscription) {
             this.uiChangeSubscription.unsubscribe();
+        }
+
+        if (gameManager.game.party.townGuardDeck) {
+            gameManager.game.party.townGuardDeck.active = this.deckActive;
         }
     }
 
@@ -132,6 +142,7 @@ export class OutpostAttackComponent {
     }
 
     beforeTownGuardDeck(change: AttackModiferDeckChange) {
+        this.attackResult = undefined;
         gameManager.stateManager.before("updateAttackModifierDeck." + change.type, 'party.campaign.townGuard', ...change.values);
     }
 
@@ -139,38 +150,34 @@ export class OutpostAttackComponent {
         this.townGuardDeck = change.deck;
         gameManager.game.party.townGuardDeck = this.townGuardDeck.toModel();
         gameManager.stateManager.after();
+        this.attackResult = gameManager.attackModifierManager.calculateAttackResult(this.townGuardDeck, (gameManager.game.party.defense || 0) + this.moraleDefense);
+    }
+
+    toggleAttackResult() {
+        if (this.attackResult && this.attackResult.chooseOffset) {
+            this.attackResult = gameManager.attackModifierManager.calculateAttackResult(this.townGuardDeck, (gameManager.game.party.defense || 0) + this.moraleDefense, this.attackResult.index + this.attackResult.chooseOffset);
+        }
     }
 
     nextTarget() {
         if (this.attacks < this.buildings.length && this.attack.targetNumber) {
             const building = this.buildings[this.attacks];
-            gameManager.stateManager.before("buildingAttacked", building.data.id, building.data.name);
+            let state = building.model.state;
+            if (this.attackResult) {
+                if (this.townGuardDeck.cards[this.attackResult.index].type == 'wreck') {
+                    state = 'wrecked';
+                } else if (this.townGuardDeck.cards[this.attackResult.index].type != 'success' && this.attackResult.result < EntityValueFunction(this.attack.attackValue)) {
+                    state = 'damaged';
+                }
+            }
+            gameManager.stateManager.before("buildingAttacked" + (state != building.model.state ? '.' + state : ''), building.data.id, building.data.name);
             gameManager.game.party.soldiers -= this.soldiers;
             this.soldiers = 0;
             building.model.attacked = true;
             this.attacks++;
-            this.applyBaracks();
-            gameManager.stateManager.after();
-        }
-    }
-
-    toggleBuildingState(building: Building) {
-        let state: "normal" | "damaged" | "wrecked" | false = false;
-        switch (building.model.state) {
-            case 'normal':
-                state = 'damaged';
-                break;
-            case 'damaged':
-                state = 'wrecked';
-                break;
-            case 'wrecked':
-                state = 'normal';
-                break;
-        }
-
-        if (state) {
-            gameManager.stateManager.before("changeBuildingState", building.data.id, building.model.name, state);
             building.model.state = state;
+            this.attackResult = undefined;
+            this.applyBaracks();
             gameManager.stateManager.after();
         }
     }
